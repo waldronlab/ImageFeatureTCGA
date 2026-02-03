@@ -69,7 +69,7 @@
             destfolders <- dirname(destfiles) |>
                 unique()
             dexist <- dir.exists(destfolders)
-            if (!any(dexist))
+            if (!all(dexist))
                 vapply(
                     destfolders[!dexist],
                     dir.create,

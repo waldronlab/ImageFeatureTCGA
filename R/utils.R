@@ -6,11 +6,7 @@
     grepl("^https?://|^ftp://", url)
 }
 
-.cache_url_file <- function(url, redownload = FALSE) {
-    cache <- getOption(
-        "BiocFileCache.cache", BiocFileCache::getBFCOption("CACHE")
-    )
-    bfc <- BiocFileCache::BiocFileCache(cache = cache)
+.cache_url_file <- function(url, redownload = FALSE, bfc) {
     bquery <- BiocFileCache::bfcquery(bfc, url, "rname", exact = TRUE)
     cached <- identical(nrow(bquery), 1L)
 
@@ -57,11 +53,11 @@
 .cache_url_files <- function(urls, redownload = FALSE, parallel = TRUE) {
     checkInstalled("curl")
     checkInstalled("BiocFileCache")
+    cache <- getOption(
+        "BiocFileCache.cache", BiocFileCache::getBFCOption("CACHE")
+    )
+    bfc <- BiocFileCache::BiocFileCache(cache = cache)
     if (parallel) {
-        cache <- getOption(
-            "BiocFileCache.cache", BiocFileCache::getBFCOption("CACHE")
-        )
-        bfc <- BiocFileCache::BiocFileCache(cache = cache)
         queries <- .url_query(bfc, urls)
         cached <- .is_cached(queries)
         locals <- vector("list", length(urls))
@@ -122,7 +118,8 @@
             function(url) {
                 .cache_url_file(
                     url = url,
-                    redownload = redownload
+                    redownload = redownload,
+                    bfc = bfc
                 )
             },
             character(1L)

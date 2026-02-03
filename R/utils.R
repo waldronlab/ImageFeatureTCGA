@@ -7,26 +7,34 @@
 }
 
 .cache_url_file <- function(url, redownload = FALSE) {
-    checkInstalled("BiocFileCache")
     cache <- getOption(
         "BiocFileCache.cache", BiocFileCache::getBFCOption("CACHE")
     )
     bfc <- BiocFileCache::BiocFileCache(cache = cache)
     bquery <- BiocFileCache::bfcquery(bfc, url, "rname", exact = TRUE)
-    ## only re-download manually b/c bfcneedsupdate always returns TRUE
-    if (identical(nrow(bquery), 1L) && redownload)
-        BiocFileCache::bfcdownload(
-            x = bfc, rid = bquery[["rid"]], ask = FALSE
-        )
+    cached <- identical(nrow(bquery), 1L)
 
-    BiocFileCache::bfcrpath(
-        x = bfc,
-        rnames = url,
-        rtype = "web",
-        download = TRUE,
-        fname = "exact",
-        exact = TRUE
-    )
+    if (!redownload && cached)
+        return(bquery[["rpath"]])
+
+    part_url <- gsub(paste0(.BASE_URL, "/"), "", url)
+    destfile <- file.path(cache, part_url)
+    destfolder <- dirname(destfile)
+    if (!dir.exists(destfolder))
+        dir.create(destfolder, recursive = TRUE, showWarnings = FALSE)
+    file <- curl::curl_download(url = url, destfile = destfile)
+    if (!cached)
+        BiocFileCache::bfcadd(
+            x = bfc,
+            rname = url,
+            fpath = file,
+            rtype = "local",
+            action = "asis",
+            fname = "exact",
+            exact = TRUE
+        )
+    else
+        file
 }
 
 .url_query <- function(bfc, urls) {
@@ -47,9 +55,9 @@
 }
 
 .cache_url_files <- function(urls, redownload = FALSE, parallel = TRUE) {
+    checkInstalled("curl")
+    checkInstalled("BiocFileCache")
     if (parallel) {
-        checkInstalled("curl")
-        checkInstalled("BiocFileCache")
         cache <- getOption(
             "BiocFileCache.cache", BiocFileCache::getBFCOption("CACHE")
         )

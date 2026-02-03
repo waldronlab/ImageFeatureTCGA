@@ -67,9 +67,7 @@
         urls <- urls[!cached | redownload]
         if (length(urls)) {
             part_urls <- gsub(paste0(.BASE_URL, "/"), "", urls)
-            destfiles <- file.path(
-                BiocFileCache::getBFCOption("CACHE"), part_urls
-            )
+            destfiles <- file.path(cache, part_urls)
             destfolders <- dirname(destfiles) |>
                 unique()
             dexist <- dir.exists(destfolders)

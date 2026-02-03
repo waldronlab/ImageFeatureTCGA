@@ -74,5 +74,5 @@ old <- options(BiocFileCache.cache = tempdir())
 on.exit(options(BiocFileCache.cache = old))
 
 ProvGigaList(slide_urls) |>
-   import(redownload = FALSE, parallel = TRUE)
+   import(redownload = FALSE, parallel = FALSE)
 }

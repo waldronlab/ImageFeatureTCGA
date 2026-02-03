@@ -51,7 +51,7 @@
 #' on.exit(options(BiocFileCache.cache = old))
 #'
 #' ProvGigaList(slide_urls) |>
-#'    import(redownload = FALSE, parallel = TRUE)
+#'    import(redownload = FALSE, parallel = FALSE)
 #' @export
 ProvGigaList <- function(
     ..., is_url = TRUE, levels = "slide_level", parallel = FALSE

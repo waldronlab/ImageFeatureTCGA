@@ -24,6 +24,6 @@ coad <- curatedTCGAData(
 )
 coad_sub <- coad[, 1:3, ]
 catalog <- getCatalog(pipeline = "provgigapath", format = "csv")
-linkTCGA(coad_sub, catalog)
+linkTCGA(coad_sub, catalog, parallel = FALSE)
 \dontshow{\}) # examplesIf}
 }

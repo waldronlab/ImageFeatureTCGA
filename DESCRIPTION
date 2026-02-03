@@ -33,6 +33,7 @@ Imports:
     SingleCellExperiment,
     SpatialExperiment,
     SummarizedExperiment,
+    TCGAutils,
     TENxIO,
     tibble,
     utils

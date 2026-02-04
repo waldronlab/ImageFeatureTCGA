@@ -105,12 +105,8 @@ getCatalog <-
         req_perform() |>
         resp_body_json()
 
-    cache <- getOption(
-        "BiocFileCache.cache", BiocFileCache::getBFCOption("CACHE")
-    )
-    bfc <- BiocFileCache::BiocFileCache(cache = cache)
     .cache_url_file(
-        resp$files[[1L]]$links$self, redownload = redownload, bfc = bfc
+        resp$files[[1L]]$links$self, redownload = redownload
     )
 }
 

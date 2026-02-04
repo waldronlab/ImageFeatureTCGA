@@ -11,7 +11,11 @@
     cached <- identical(nrow(bquery), 1L)
 
     if (!redownload && cached)
-        return(bquery[["rpath"]])
+        return(
+            BiocFileCache::bfcrpath(
+                bfc, rnames = url, exact = TRUE, download = TRUE, rtype = "web"
+            )
+        )
 
     cache <- BiocFileCache::bfccache(bfc)
     part_url <- gsub(paste0(.BASE_URL, "/"), "", url)

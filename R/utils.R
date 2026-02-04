@@ -13,6 +13,7 @@
     if (!redownload && cached)
         return(bquery[["rpath"]])
 
+    cache <- BiocFileCache::bfccache(bfc)
     part_url <- gsub(paste0(.BASE_URL, "/"), "", url)
     destfile <- file.path(cache, part_url)
     destfolder <- dirname(destfile)

@@ -92,21 +92,21 @@ plotHoverNetOverlay <- function(
 ) {
 
     checkInstalled("magick")
-    
+
     # Handle input: if hovernet is a path/URL, import it
     if (is.character(hovernet) && length(hovernet) == 1) {
         json_path <- hovernet
         hovernet <- HoverNet(json_path, outClass = "SpatialExperiment") |>
             import()
     }
-    
+
     # Validate input
-    if (!is(hovernet, "SpatialExperiment") && 
+    if (!is(hovernet, "SpatialExperiment") &&
         !is(hovernet, "SpatialFeatureExperiment")) {
         stop("'hovernet' must be a SpatialExperiment, ",
             "SpatialFeatureExperiment, or a path to a HoverNet JSON file.")
     }
-    
+
     # Get JSON path from metadata if not provided
     if (is.null(json_path)) {
         json_path <- metadata(hovernet)$json_path
@@ -115,24 +115,24 @@ plotHoverNetOverlay <- function(
                     "SpatialExperiment object without metadata$json_path.")
         }
     }
-    
+
     # Import thumbnail
     png_img <- importHoverNetThumbnail(json_path)
     if (is.null(png_img)) {
         stop("Could not retrieve thumbnail image for: ", json_path)
     }
-    
+
     # Prepare data for plotting
     gg <- data.frame(
         spatialCoords(hovernet),
         colData(hovernet)
     )
-    
+
     # Determine color palette
     if (is.null(color_palette)) {
         # Try to use colors from type_map in metadata
         type_map <- metadata(hovernet)$type_map
-        if (!is.null(type_map) && 
+        if (!is.null(type_map) &&
             all(c("label", "R", "G", "B") %in% names(type_map))) {
             color_palette <- rgb(
                 type_map$R / 255,
@@ -147,7 +147,7 @@ plotHoverNetOverlay <- function(
             )[seq_len(n_types)]
         }
     }
-    
+
     # Create segmentation plot
     p_feat <- ggplot2::ggplot(gg, ggplot2::aes(x, y, col = label)) +
         ggplot2::geom_point(size = point_size) +
@@ -161,12 +161,12 @@ plotHoverNetOverlay <- function(
             )
         ) +
         ggplot2::theme_void()
-    
+
     # Create version without legend for side-by-side comparison
     p_feat_nolegend <- p_feat +
         ggplot2::theme(legend.position = "none") +
         ggplot2::coord_fixed(ratio = 1)
-    
+
     # Extract legend
     legend <- cowplot::get_legend(
         p_feat +
@@ -175,16 +175,16 @@ plotHoverNetOverlay <- function(
                 legend.box.margin = ggplot2::margin(0, 0, 0, 10)
             )
     )
-    
+
     # Prepare image
     img <- magick::image_read(png_img)
     if (flip_image) {
         img <- magick::image_flip(img)
     }
-    
+
     # Create image plot
     p_img <- cowplot::ggdraw() + cowplot::draw_image(img)
-    
+
     # Combine plots side by side
     combo_plots <- cowplot::plot_grid(
         p_img, p_feat_nolegend,
@@ -193,21 +193,21 @@ plotHoverNetOverlay <- function(
         axis = "tblr",
         rel_widths = rel_widths
     )
-    
+
     # Add legend on the right without changing plot proportions
     combo <- cowplot::plot_grid(
         combo_plots, legend,
         ncol = 2,
         rel_widths = c(1, 0.15)
     )
-    
+
     # Add title if provided
     if (is.null(title)) {
         title <- tools::file_path_sans_ext(
             tools::file_path_sans_ext(basename(json_path))
         )
     }
-    
+
     if (!is.null(title) && nchar(title) > 0) {
         title_plot <- cowplot::ggdraw() +
             cowplot::draw_label(
@@ -217,7 +217,7 @@ plotHoverNetOverlay <- function(
                 hjust = 0.5,
                 size = title_size
             )
-        
+
         final <- cowplot::plot_grid(
             title_plot, combo,
             ncol = 1,
@@ -226,7 +226,7 @@ plotHoverNetOverlay <- function(
     } else {
         final <- combo
     }
-    
+
     return(final)
 }
 
@@ -307,53 +307,51 @@ plotHoverNetH5ADOverlay <- function(
         title_size = 25,
         flip_image = TRUE
 ) {
-    
+
     # Validate input
-    if (!is(hovernet, "SpatialExperiment") && 
+    if (!is(hovernet, "SpatialExperiment") &&
         !is(hovernet, "SpatialFeatureExperiment")) {
         stop("'hovernet' must be a SpatialExperiment or ",
              "SpatialFeatureExperiment object.")
     }
-    
+
     # Check for required columns
     if (!"type" %in% colnames(colData(hovernet))) {
         stop("'hovernet' must contain a 'type' column in colData.")
     }
-    
+
     coords <- spatialCoords(hovernet)
     if (!all(c("x_centroid", "y_centroid") %in% colnames(coords))) {
         stop("'hovernet' must contain 'x_centroid' and 'y_centroid' in ",
              "spatialCoords.")
     }
-    
+
     # Check thumbnail path
     if (missing(thumbnail_path) || is.null(thumbnail_path)) {
         stop("'thumbnail_path' is required.")
     }
-    
+
     # Handle URL or local file for thumbnail
     is_url <- .is_url(thumbnail_path)
-    if (is_url) {
+    if (is_url)
         thumbnail_path <- .cache_url_file(thumbnail_path)
-    }
-    
-    if (!file.exists(thumbnail_path)) {
+
+    if (!file.exists(thumbnail_path))
         stop("Thumbnail file not found: ", thumbnail_path)
-    }
-    
+
     # Prepare data for plotting
     gg <- data.frame(
         x = coords[, "x_centroid"],
         y = coords[, "y_centroid"],
         type = colData(hovernet)$type
     )
-    
+
     # Determine color palette
     if (is.null(color_palette)) {
         # Get unique types
         unique_types <- unique(gg$type)
         n_types <- length(unique_types)
-        
+
         # Use RColorBrewer palette
         if (n_types <= 12) {
             color_palette <- RColorBrewer::brewer.pal(
@@ -365,7 +363,7 @@ plotHoverNetH5ADOverlay <- function(
         }
         names(color_palette) <- unique_types
     }
-    
+
     # Create segmentation plot
     p_feat <- ggplot2::ggplot(gg, ggplot2::aes(x, y, col = type)) +
         ggplot2::geom_point(size = point_size) +
@@ -379,12 +377,12 @@ plotHoverNetH5ADOverlay <- function(
             )
         ) +
         ggplot2::theme_void()
-    
+
     # Create version without legend for side-by-side comparison
     p_feat_nolegend <- p_feat +
         ggplot2::theme(legend.position = "none") +
         ggplot2::coord_fixed(ratio = 1)
-    
+
     # Extract legend
     legend <- cowplot::get_legend(
         p_feat +
@@ -393,16 +391,16 @@ plotHoverNetH5ADOverlay <- function(
                 legend.box.margin = ggplot2::margin(0, 0, 0, 10)
             )
     )
-    
+
     # Prepare image
     img <- magick::image_read(thumbnail_path)
     if (flip_image) {
         img <- magick::image_flip(img)
     }
-    
+
     # Create image plot
     p_img <- cowplot::ggdraw() + cowplot::draw_image(img)
-    
+
     # Combine plots side by side
     combo_plots <- cowplot::plot_grid(
         p_img, p_feat_nolegend,
@@ -411,19 +409,19 @@ plotHoverNetH5ADOverlay <- function(
         axis = "tblr",
         rel_widths = rel_widths
     )
-    
+
     # Add legend on the right
     combo <- cowplot::plot_grid(
         combo_plots, legend,
         ncol = 2,
         rel_widths = c(1, 0.15)
     )
-    
+
     # Add title if provided
     if (is.null(title)) {
         title <- "HoverNet Segmentation"
     }
-    
+
     if (!is.null(title) && nchar(title) > 0) {
         title_plot <- cowplot::ggdraw() +
             cowplot::draw_label(
@@ -433,7 +431,7 @@ plotHoverNetH5ADOverlay <- function(
                 hjust = 0.5,
                 size = title_size
             )
-        
+
         final <- cowplot::plot_grid(
             title_plot, combo,
             ncol = 1,
@@ -442,6 +440,6 @@ plotHoverNetH5ADOverlay <- function(
     } else {
         final <- combo
     }
-    
+
     return(final)
 }

@@ -7,6 +7,12 @@
 }
 
 .cache_url_file <- function(url, redownload = FALSE, bfc) {
+    if (missing(bfc))
+        bfc <- BiocFileCache::BiocFileCache(
+            cache = getOption(
+                "BiocFileCache.cache", BiocFileCache::getBFCOption("CACHE")
+            )
+        )
     bquery <- BiocFileCache::bfcquery(bfc, url, "rname", exact = TRUE)
     cached <- identical(nrow(bquery), 1L)
 

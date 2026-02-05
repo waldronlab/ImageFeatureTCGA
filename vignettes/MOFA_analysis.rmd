@@ -31,8 +31,10 @@ library(MOFA2)
 
 ```{r load embeddings}
 coad_slide_files <- getCatalog("provgigapath") |> 
-    filter(Project.ID == "TCGA-COAD") |> 
-    slice(1:5)
+    filter(Project.ID == "TCGA-COAD")
+
+coad_slide_files = coad_slide_files[1:5, ]
+
 
 structure_last <- coad_slide_files |>
     getFileURLs() |>

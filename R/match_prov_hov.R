@@ -91,7 +91,7 @@ matchHoverNetToTiles <- function(
     if (!is(hovernet, "SpatialExperiment") && 
         !is(hovernet, "SpatialFeatureExperiment")) {
         stop("'hovernet' must be a SpatialExperiment or ",
-             "SpatialFeatureExperiment object.")
+            "SpatialFeatureExperiment object.")
     }
     
     if (!is.data.frame(tiles)) {
@@ -105,7 +105,7 @@ matchHoverNetToTiles <- function(
     # Check required columns
     if (!all(c(cell_x, cell_y) %in% colnames(coords))) {
         stop("Spatial coordinates '", cell_x, "' and '", cell_y, 
-             "' not found in spatialCoords.")
+            "' not found in spatialCoords.")
     }
     
     if (!cell_type %in% colnames(cell_data)) {
@@ -114,7 +114,7 @@ matchHoverNetToTiles <- function(
     
     if (!all(c(tile_x, tile_y, tile_id) %in% colnames(tiles))) {
         stop("Required tile columns not found: ", 
-             paste(c(tile_x, tile_y, tile_id), collapse = ", "))
+            paste(c(tile_x, tile_y, tile_id), collapse = ", "))
     }
     
     # Create cell metadata data.frame

@@ -42,7 +42,7 @@ structure_last <- coad_slide_files |>
     getEmbeddings()
 
 rownames(structure_last) <- coad_slide_files[["tcga_barcode"]]
-structure_last
+
 ```
 
 

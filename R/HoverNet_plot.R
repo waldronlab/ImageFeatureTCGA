@@ -312,7 +312,7 @@ plotHoverNetH5ADOverlay <- function(
     if (!is(hovernet, "SpatialExperiment") &&
         !is(hovernet, "SpatialFeatureExperiment")) {
         stop("'hovernet' must be a SpatialExperiment or ",
-             "SpatialFeatureExperiment object.")
+            "SpatialFeatureExperiment object.")
     }
 
     # Check for required columns
@@ -323,7 +323,7 @@ plotHoverNetH5ADOverlay <- function(
     coords <- spatialCoords(hovernet)
     if (!all(c("x_centroid", "y_centroid") %in% colnames(coords))) {
         stop("'hovernet' must contain 'x_centroid' and 'y_centroid' in ",
-             "spatialCoords.")
+            "spatialCoords.")
     }
 
     # Check thumbnail path

@@ -5,6 +5,20 @@
 #'
 #' @param MultiAssayExperiment A `MultiAssayExperiment` object containing sample
 #'   metadata with TCGA barcodes.
+#' @param catalog A `data.frame` from `getCatalog()` containing file metadata.
+#' @param redownload Logical. Whether to re-download cached files. Default is
+#'   `FALSE`.
+#' @param parallel Logical. Whether to use parallel processing. Default is
+#'   `TRUE`.
+#'
+#' @return A `MultiAssayExperiment` object with two additional assays:
+#'   \describe{
+#'     \item{slide_assay}{A `SummarizedExperiment` containing slide-level
+#'       ProvGigaPath embeddings.}
+#'     \item{tile_assay}{A `SummarizedExperiment` containing tile-level
+#'       ProvGigaPath embeddings stored as a `BumpyMatrix`.}
+#'   }
+#'
 #'
 #' @importFrom S4Vectors DataFrame
 #'

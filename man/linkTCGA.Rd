@@ -9,6 +9,23 @@ linkTCGA(MultiAssayExperiment, catalog, redownload = FALSE, parallel = TRUE)
 \arguments{
 \item{MultiAssayExperiment}{A \code{MultiAssayExperiment} object containing sample
 metadata with TCGA barcodes.}
+
+\item{catalog}{A \code{data.frame} from \code{getCatalog()} containing file metadata.}
+
+\item{redownload}{Logical. Whether to re-download cached files. Default is
+\code{FALSE}.}
+
+\item{parallel}{Logical. Whether to use parallel processing. Default is
+\code{TRUE}.}
+}
+\value{
+A \code{MultiAssayExperiment} object with two additional assays:
+\describe{
+\item{slide_assay}{A \code{SummarizedExperiment} containing slide-level
+ProvGigaPath embeddings.}
+\item{tile_assay}{A \code{SummarizedExperiment} containing tile-level
+ProvGigaPath embeddings stored as a \code{BumpyMatrix}.}
+}
 }
 \description{
 Link MultiAssayExperiment object to TCGA data

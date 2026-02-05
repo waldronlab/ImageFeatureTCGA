@@ -218,7 +218,10 @@ model_opts$num_factors <- 15  # the default
 
 # Set training options
 train_opts <- get_default_training_options(mofa_obj)
-train_opts$convergence_mode <- "fast" # currently set to fast for vignette rendering speed but slow is recommended
+
+# currently set to fast for vignette rendering speed but slow is recommended
+train_opts$convergence_mode <- "fast" 
+
 train_opts$seed <- 42
 
 # Prepare the model

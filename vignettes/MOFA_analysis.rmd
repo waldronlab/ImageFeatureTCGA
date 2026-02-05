@@ -48,7 +48,7 @@ structure_last
 
 ```{r load_rnaseq, message=FALSE}
 #------------------------------------------
-# 1. Load COAD RNASeq assay
+# Load COAD RNASeq assay
 #------------------------------------------
 coad_mae_all <- curatedTCGAData(
     diseaseCode = "COAD",
@@ -79,7 +79,7 @@ for (i in seq_along(coad_mae)) {
 # Prep embedding
 ```{r prep embedding}
 #------------------------------------------
-# 2. Prepare embedding layers
+# Prepare embedding layers
 #------------------------------------------
 prepare_layer <- function(mat) {
     rownames(mat) <- rownames(mat) %||% paste0("patient_", seq_len(nrow(mat)))
@@ -100,7 +100,7 @@ structure_last_prepped <- prepare_layer(structure_last)
 # Prep clinical metadata
 ```{r prep clinical metadata}
 #------------------------------------------
-# 3. Prepare clinical metadata
+# Prepare clinical metadata
 #------------------------------------------
 prepare_clinical <- function(mae) {
     clinical <- colData(mae)
@@ -118,7 +118,8 @@ prepare_clinical <- function(mae) {
     numLv <- apply(clinical_sub, 2, function(x) length(unique(x)))
     slideAttrNames <- names(numLv[numLv >= 2 & numLv <= 10])
     for (slideAttrName in slideAttrNames) {
-        clinical_sub[[slideAttrName]] <- as.factor(clinical_sub[[slideAttrName]])
+        clinical_sub[[slideAttrName]] <- as.factor(
+            clinical_sub[[slideAttrName]])
     }
 
     clinical_sub
@@ -132,16 +133,18 @@ metadata_df <- prepare_clinical(coad_mae)
 
 ```{r create embedding SE}
 #------------------------------------------
-# 4. Create embedding SE
+# Create embedding SE
 #------------------------------------------
 make_embedding_se <- function(embedding_matrix, metadata_df) {
     # Find patients present in both embedding matrix and clinical metadata
-    patients_with_image <- intersect(rownames(embedding_matrix), rownames(metadata_df))
+    patients_with_image <- intersect(
+        rownames(embedding_matrix), 
+        rownames(metadata_df))
 
     print(paste("Number of common patients:", length(patients_with_image)))
 
     if (length(patients_with_image) == 0) {
-        stop("No common patients found between embedding matrix and clinical metadata")
+        stop("No common patients found between embed and clinical metadata")
     }
 
     # Subset both to common patients
@@ -173,9 +176,13 @@ embedding_se_last <- make_embedding_se(structure_last_prepped, metadata_df)
 
 ```{r create MAE, warning=FALSE}
 # common patients
-common_final <- intersect(colnames(updated_coad_mae[["COAD_RNASeq2GeneNorm-20160128"]]), 
-                            colnames(embedding_se_last))
-common_final <- intersect(common_final, rownames(metadata_df))
+common_final <- intersect(
+    colnames(updated_coad_mae[["COAD_RNASeq2GeneNorm-20160128"]]), 
+    colnames(embedding_se_last))
+
+common_final <- intersect(
+    common_final, 
+    rownames(metadata_df))
 
 # create MAE
 crc_mae <- MultiAssayExperiment(

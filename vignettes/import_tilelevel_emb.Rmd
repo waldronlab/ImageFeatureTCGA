@@ -219,8 +219,8 @@ match_hv_pg <- matchHoverNetToTiles(hn_spe, pg_spe)
 ```{r visualizing tile level with hovernet}
 
 ggplot(match_hv_pg$tiles_with_nuclei, aes(tile_x, tile_y, 
-                                      color = cell_type_label, 
-                                      size = N)) +
+                                    color = cell_type_label, 
+                                    size = N)) +
     geom_point(alpha = 0.7) +
     coord_equal() +
     theme_minimal() +
@@ -228,7 +228,7 @@ ggplot(match_hv_pg$tiles_with_nuclei, aes(tile_x, tile_y,
 
 
 ggplot(match_hv_pg$tiles_with_nuclei, aes(tile_x, tile_y, 
-                                      color = dominant_cell_type)) +
+                                    color = dominant_cell_type)) +
     geom_point(size = 2) +
     coord_equal() +
     theme_minimal() +

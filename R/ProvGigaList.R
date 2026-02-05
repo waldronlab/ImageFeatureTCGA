@@ -39,6 +39,14 @@
 #' @param ... Multiple `ProvGiga` objects, a vector of file paths or URLs, or a
 #'   list of these elements. For `import`, futher arguments are passed to the
 #'   `import` method for the individual `ProvGiga` objects.
+#' @param is_url Logical. Whether the input resources are URLs. Default is
+#'   `TRUE`.
+#' @param levels Character. The data levels for each resource. Default is
+#'   `"slide_level"`.
+#' @param parallel Logical. Whether to use parallel processing. Default is
+#'   `FALSE`.
+#'
+#' @return A `ProvGigaList` object containing multiple `ProvGiga` objects.
 #'
 #' @examples
 #' slide_urls <- getCatalog("provgigapath") |>

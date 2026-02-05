@@ -23,6 +23,15 @@ getEmbeddings(con, parallel = TRUE, layer = "last_layer_embed", ...)
 list of these elements. For \code{import}, futher arguments are passed to the
 \code{import} method for the individual \code{ProvGiga} objects.}
 
+\item{is_url}{Logical. Whether the input resources are URLs. Default is
+\code{TRUE}.}
+
+\item{levels}{Character. The data levels for each resource. Default is
+\code{"slide_level"}.}
+
+\item{parallel}{Logical. Whether to use parallel processing. Default is
+\code{FALSE}.}
+
 \item{object}{A \code{ProvGigaList} object.}
 
 \item{con}{The connection from which data is loaded or to which data is
@@ -39,6 +48,9 @@ unnecessary when \code{con} is a derivative of \link[BiocIO:BiocFile-class]{Bioc
 
 \item{text}{If \code{con} is missing, this can be a character vector directly
 providing the string data to import.}
+}
+\value{
+A \code{ProvGigaList} object containing multiple \code{ProvGiga} objects.
 }
 \description{
 The \code{ProvGigaList} class is a container for multiple \code{ProvGiga}

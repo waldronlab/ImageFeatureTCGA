@@ -89,7 +89,8 @@ Returns tile-level cell type counts and dominant cell types.
 \details{
 The function performs the following steps:
 \enumerate{
-\item Computes a scale factor to align nuclei coordinates with tile coordinates
+\item Computes a scale factor to align nuclei coordinates with
+tile coordinates
 \item Scales nuclei coordinates using the computed scale factor
 \item Creates bounding boxes for each tile based on tile_size
 \item Assigns nuclei to tiles using spatial overlap
@@ -103,7 +104,8 @@ each is the ratio of coordinate ranges between nuclei and tiles.
 
 The function performs the following steps:
 \enumerate{
-\item Computes a scale factor to align nuclei coordinates with tile coordinates
+\item Computes a scale factor to align nuclei coordinates with
+tile coordinates
 \item Scales nuclei coordinates using the computed scale factor
 \item Creates bounding boxes for each tile based on tile_size
 \item Assigns nuclei to tiles using spatial overlap

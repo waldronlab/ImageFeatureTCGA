@@ -246,7 +246,8 @@
 #'   }
 #'
 #' @details The function performs the following steps:
-#'   1. Computes a scale factor to align nuclei coordinates with tile coordinates
+#'   1. Computes a scale factor to align nuclei coordinates with 
+#'   tile coordinates
 #'   2. Scales nuclei coordinates using the computed scale factor
 #'   3. Creates bounding boxes for each tile based on tile_size
 #'   4. Assigns nuclei to tiles using spatial overlap

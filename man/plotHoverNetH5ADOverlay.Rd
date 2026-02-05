@@ -75,17 +75,18 @@ Remote PNG files are automatically cached using \code{BiocFileCache} for
 efficient handling without manual downloads.
 }
 \examples{
-\dontrun{
-# From local file
-thumbnail_path <- "path/to/thumbnail.png"
-plotHoverNetH5ADOverlay(hn_spe, thumbnail_path = thumbnail_path)
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
+# Load h5ad HoverNet data
+h5ad_url <- paste0(
+  "https://store.cancerdatasci.org/hovernet/h5ad/",
+  "TCGA-VG-A8LO-01A-01-DX1.B39A4D64-82A1-4A04-8AB6-918F3058B83B.h5ad"
+)
+hn_spe <- HoverNet(h5ad_url, outClass = "SpatialExperiment") |> import()
 
-# From URL (with automatic caching)
 thumb_url <- paste0(
   "https://store.cancerdatasci.org/hovernet/thumb/",
   "TCGA-VG-A8LO-01A-01-DX1.B39A4D64-82A1-4A04-8AB6-918F3058B83B.png"
 )
 plotHoverNetH5ADOverlay(hn_spe, thumbnail_path = thumb_url)
-}
-
+\dontshow{\}) # examplesIf}
 }

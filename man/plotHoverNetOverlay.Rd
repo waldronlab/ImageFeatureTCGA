@@ -75,29 +75,11 @@ The segmentation uses the \code{type} column from the \code{colData} and colors 
 taken from the \code{type_map} metadata if available.
 }
 \examples{
-\dontrun{
-# From a JSON file path
-json_file <- "path/to/sample.json.gz"
-plotHoverNetOverlay(json_file, title = "Sample Tissue")
-
-# From a URL
+\dontshow{if (interactive()) withAutoprint(\{ # examplesIf}
 json_url <- paste0(
-  "https://store.cancerdatasci.org/hovernet/TCGA_OV/json/",
+  "https://store.cancerdatasci.org/hovernet/json/",
   "TCGA-VG-A8LO-01A-01-DX1.B39A4D64-82A1-4A04-8AB6-918F3058B83B.json.gz"
 )
-plotHoverNetOverlay(json_url)
-
-# From a SpatialExperiment object
-hn_spe <- HoverNet(json_file) |> import()
-plotHoverNetOverlay(hn_spe, json_path = json_file)
-
-# Custom colors
-custom_colors <- c(
-  "neopla" = "#FF0000",
-  "inflam" = "#00FF00",
-  "connec" = "#0000FF"
-)
-plotHoverNetOverlay(json_file, color_palette = custom_colors)
-}
-
+plotHoverNetOverlay(json_url, title = "TCGA-VG-A8LO Sample")
+\dontshow{\}) # examplesIf}
 }
